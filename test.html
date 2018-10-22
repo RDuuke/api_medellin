@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("DELETE", "http://localhost:8080/", false);
+    xhr.setRequestHeader("PHP_AUTH_USER", "Juan");
+    xhr.setRequestHeader("PHP_AUTH_PW", "123D");
+    xhr.send(null);
+    if (xhr.status == 200)
+        console.log(xhr.responseText)
+
+</script>
+</body>
+</html>
