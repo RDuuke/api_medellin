@@ -18,4 +18,8 @@ class University extends Model
         "vigencia_de_la_acreditacion", "logo_universidad"
     ];
 
+    public function getSectorAttribute($value)
+    {
+        return $value == "OFICIAL" ? "PUBLICA" : $value;
+    }
 }
