@@ -29,7 +29,7 @@ class UniversityController
 
         $responseJson = $response->withHeader("Content-type", "application/json");
 
-        $universities = University::all(["Código Institución AS codigo", "nombre", "sector", "logo_universidad"]);
+        $universities = University::all(["codigo", "nombre", "sector", "logo_universidad"]);
         return $responseJson->withJson([
             "status" => 1,
             "data" => $universities,
