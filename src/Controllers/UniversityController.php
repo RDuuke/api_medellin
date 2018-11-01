@@ -4,7 +4,7 @@ namespace Api\Controllers;
 
 use Api\Models\University;
 use Api\Models\UsersApi;
-use MongoDB\Driver\Manager;
+use Illuminate\Database\Capsule\Manager;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -34,6 +34,25 @@ class UniversityController
             "status" => 1,
             "data" => $universities,
             "message" => "All universities"
+            ],
+            200
+        );
+    }
+    public function programsForUniversity(Request $request, Response $response, $args)
+    {
+
+        $responseJson = $response->withHeader("Content-type", "application/json");
+
+        $universities = Manager::table("universidades")
+            ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->select(["universidades.codigo", "universidades.sector", "ies_medellin.id", "ies_medellin.nombre", "ies_medellin.basico_de_conocimiento"])
+            ->where("ies_medellin.codigo_institucion", $args['codigo'])
+            ->get();
+
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $universities,
+            "message" => "All programs for of University"
             ],
             200
         );

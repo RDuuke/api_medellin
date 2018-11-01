@@ -22,4 +22,9 @@ class University extends Model
     {
         return $value == "OFICIAL" ? "PUBLICA" : $value;
     }
+
+    public function programForUniversity()
+    {
+        return $this->hasMany(Programs::class, "codigo_institucion", "codigo")->select(["id", "nombre", "basico_de_conocimiento"]);
+    }
 }

@@ -26,7 +26,7 @@ class ProgramsController extends Controller
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
         try {
-            $programs = Programs::where("codigo_institucion", $args["codigo"])->get();
+            $programs = Programs::select("id", "nombre", "basico_de_conocimiento")->where("codigo_institucion", $args["codigo"])->get();
 
             return $responseJson->withJson([
                "status" => 1,
