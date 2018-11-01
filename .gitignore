@@ -1,5 +1,5 @@
 /vendor
-!config/app.php
+!config/bootstrap.php
 config/
 
 .idea/
