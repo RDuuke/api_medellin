@@ -1,6 +1,6 @@
 /vendor
-!bootstrap/app.php
-bootstrap/
+!config/app.php
+config/
 
 .idea/
 *.sln.iml
