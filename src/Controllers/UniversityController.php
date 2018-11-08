@@ -45,7 +45,7 @@ class UniversityController
 
         $universities = Manager::table("universidades")
             ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
-            ->select(["universidades.codigo", "universidades.sector", "ies_medellin.id", "ies_medellin.nombre", "ies_medellin.basico_de_conocimiento"])
+            ->select(["universidades.codigo", "universidades.sector", "ies_medellin.id", "ies_medellin.nombre", "ies_medellin.basico_de_conocimiento", "universidades.logo_universidad"])
             ->where("ies_medellin.codigo_institucion", $args['codigo'])
             ->get();
 
