@@ -4,6 +4,7 @@ namespace Api\Controllers;
 
 
 use Api\Models\Programs;
+use Illuminate\Database\Capsule\Manager;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -22,47 +23,30 @@ class ProgramsController extends Controller
         ], 200);
     }
 
-    public function programsForUniversity(Request $request, Response $response, $args)
+    public function detailsForProgram(Request $request, Response $response, $args)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
-        try {
-            $programs = Programs::select("id", "nombre", "basico_de_conocimiento")->where("codigo_institucion", $args["codigo"])->get();
-
-            return $responseJson->withJson([
-               "status" => 1,
-               "data" => $programs,
-               "message" => "Programs for the codigo: ". $args["codigo"]
-            ], 200);
-        } catch (\Exception $e) {
-            return $responseJson->withJson([
-               "status" => 4,
-               "data" => [],
-               "message" => "No result for the codigo: " . $args["codigo"]
-            ]);
-        }
+        $program = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area"])
+            ->where("ies_medellin.id", $args['id'])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $program,
+            "message" => "Details of program with id: " . $args['id']
+        ]);
     }
 
     public function programForAreaSectorAndUniversity(Request $request, Response $response, $args)
     {
-        $responseJson = $response->withHeader("Content-type", "application/json");
 
-        $area = ! empty($args["area"]) ? $args["area"] : "";
-
-        $area = ! empty($args["sector"]) ? $args["sector"] : "";
-
-        $area = ! empty($args["sector"]) ? $args["sector"] : "";
-        try {
-            if (count($args) == 3) {
-                $programs = Programs::where("area_de_conococimiento", $args["area"])
-                            ->where("");
-            } else if (count($args) == 2) {
-
-            } else {
-
-            }
-        } catch (\Exception $e) {
-
-        }
     }
 
 }
