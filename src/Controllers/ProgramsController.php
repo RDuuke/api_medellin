@@ -34,7 +34,8 @@ class ProgramsController extends Controller
                 "universidades.logo_universidad", "universidades.direccion",
                 "universidades.direccion_google_maps AS google_maps",
                 "basico_de_conocimiento.nombre AS basico",
-                "area_de_conocimiento.nombre AS area"])
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
             ->where("ies_medellin.id", $args['id'])
             ->get();
         return $responseJson->withJson([
