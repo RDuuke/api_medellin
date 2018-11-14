@@ -33,6 +33,7 @@ class UniversityController
         $universities = Manager::table("universidades")
             ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
             ->select(["universidades.sector", "universidades.nombre", "universidades.codigo", "universidades.logo_universidad"])
+            ->groupBy(["universidades.codigo"])
             ->get();
 
         return $responseJson->withJson([
