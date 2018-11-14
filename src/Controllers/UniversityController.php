@@ -16,6 +16,7 @@ class UniversityController
         $responseJson = $response->withHeader("Content-type", "application/json");
 
         $universities = University::all(["codigo", "nombre"]);
+
         return $responseJson->withJson([
             "status" => 1,
             "data" => $universities,
@@ -29,7 +30,11 @@ class UniversityController
 
         $responseJson = $response->withHeader("Content-type", "application/json");
 
-        $universities = University::all(["codigo", "nombre", "sector", "logo_universidad"]);
+        $universities = Manager::table("universidades")
+            ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->select(["universidades.sector", "universidades.nombre", "universidades.codigo", "universidades.logo_universidad"])
+            ->get();
+
         return $responseJson->withJson([
             "status" => 1,
             "data" => $universities,
@@ -46,14 +51,14 @@ class UniversityController
         $universities = Manager::table("universidades")
             ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
             ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
-            ->select(["universidades.codigo", "universidades.sector", "ies_medellin.id", "ies_medellin.nombre", "basico_de_conocimiento.nombre AS basico", "universidades.logo_universidad"])
+            ->select(["universidades.sector", "ies_medellin.id", "ies_medellin.nombre", "basico_de_conocimiento.nombre AS basico", "universidades.logo_universidad"])
             ->where("ies_medellin.codigo_institucion", $args['codigo'])
             ->get();
 
         return $responseJson->withJson([
             "status" => 1,
             "data" => $universities,
-            "message" => "All programs for of University"
+            "message" => "All programs for of University with codigo: ".$args['codigo']
             ],
             200
         );
