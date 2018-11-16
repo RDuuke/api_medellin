@@ -33,6 +33,7 @@ class ProgramsController extends Controller
             ->select(["universidades.sector", "ies_medellin.*",
                 "universidades.logo_universidad", "universidades.direccion",
                 "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
                 "basico_de_conocimiento.nombre AS basico",
                 "area_de_conocimiento.nombre AS area",
                 "universidades.caracter_academico AS caracter"])

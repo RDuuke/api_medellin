@@ -12,8 +12,14 @@ $app->group("/api/v1", function () {
         $this->get("/{id}", "ProgramsController:detailsForProgram");
     });
     $this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
+    $this->get("/search[/{area}/{sector}]]", "ProgramsController:programForAreaSectorAndUniversity");
 
     $this->get("/areas", "ProgramsController:areas");
+    #TODO filtros
+    // endpoint/search
+    // endpoint/search/1
+    // endpoint/search//1
+    // endpoint/search/2/1
 });
 
 $app->group("/api/v1", function (){
