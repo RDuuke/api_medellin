@@ -11,8 +11,8 @@ $app->group("/api/v1", function () {
     $this->group("/programs", function (){
         $this->get("/{id}", "ProgramsController:detailsForProgram");
     });
-    $this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
-    $this->get("/search[/{area}/{sector}]]", "ProgramsController:programForAreaSectorAndUniversity");
+    //$this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
+    //$this->get("/search[/{area}/{sector}]", "ProgramsController:programForAreaSectorAndUniversity");
 
     $this->get("/areas", "ProgramsController:areas");
     #TODO filtros
