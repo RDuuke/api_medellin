@@ -38,7 +38,7 @@ class UserAppController extends Controller
             return $responseJson->withJson([
                 "status" => 0,
                 "data" => [],
-                "message" => "Error in the database"
+                "message" => "Error in the database : " . $e->getMessage()
             ],
                 500
             );
