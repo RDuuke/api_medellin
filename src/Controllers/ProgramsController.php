@@ -46,6 +46,27 @@ class ProgramsController extends Controller
         ]);
     }
 
+    public function all(Request $request, Response $response)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+        $program = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $program,
+            "message" => "All programs"
+        ]);
+    }
     public function programForAreaSectorAndUniversity(Request $request, Response $response, $args)
     {
 

@@ -10,6 +10,7 @@ $app->group("/api/v1", function () {
     $this->get("/university/{codigo}/programs", "UniversityController:programsForUniversity");
     $this->group("/programs", function (){
         $this->get("/{id}", "ProgramsController:detailsForProgram");
+        $this->get("", "ProgramController:all");
     });
     $this->post("/user", "UserAppController:storeUser")->add(new \Api\Middlewares\UserApiMiddleware());
     //$this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
