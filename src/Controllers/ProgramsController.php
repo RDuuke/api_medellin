@@ -51,7 +51,14 @@ class ProgramsController extends Controller
     public function levelAcademic(Request $request, Response $response, $args)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
-        $programs = self::getData(2, $args['level'], $this->academic_level[$args['level']]);
+        $programs = Manager::table("universidades")
+            ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.id", "ies_medellin.nombre", "basico_de_conocimiento.nombre AS basico", "universidades.logo_universidad"])
+            ->where("ies_medellin.nivel_academico", $this->academic_level[$args['level']])
+            ->orWhere("nivel_formacion", $this->academic_level[$args['level']])
+            ->get();
+        //$programs = self::getData(2, $args['level'], $this->academic_level[$args['level']]);
         return $responseJson->withJson([
             "status" => 1,
             "data" => $programs,
