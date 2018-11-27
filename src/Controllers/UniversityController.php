@@ -10,6 +10,7 @@ use Slim\Http\Response;
 
 class UniversityController
 {
+    protected $sector = ["p" => "PRIVADA", "o" => "OFICIAL"];
     public function filterAllUniversity(Request $request, Response $response)
     {
 
@@ -87,6 +88,39 @@ class UniversityController
                 400
             );
         }
+    }
+
+    public function getUniversityForSectorOrArea(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+
+        $universities_filter = Manager::table("universidades")
+            ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.codigo", "universidades.nombre", "area_de_conocimiento.id AS area", "universidades.sector"])
+            ->groupBy(["universidades.codigo"])
+            ->get();
+        $first= $args['first'];
+        $secod = $args['second'] ?? "";
+        if ($first == "p" or $first == "o") {
+            $universities = $universities_filter->where("sector", "=", $this->sector[$first]);
+            if (!empty($secod)) {
+                $universities = $universities_filter->where("area", "=", $secod);
+            }
+        } else {
+            $universities = $universities_filter->where("area", "=", $first);
+            if (!empty($secod)) {
+                $universities = $universities->where("sector", "=", $this->sector[$secod]);
+            }
+        }
+
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $universities,
+            "message" => "Universities with the sector : {$this->sector[$secod]} and the area: $first"
+        ], 200);
+
     }
 
 
