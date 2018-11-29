@@ -101,6 +101,8 @@ class UniversityController
             ->select(["universidades.codigo", "universidades.nombre", "area_de_conocimiento.id AS area", "universidades.sector"])
             ->groupBy(["universidades.codigo"])
             ->get();
+        echo "<pre>";
+
         $first= $args['first'];
         $secod = $args['second'] ?? "";
         if ($first == "p" or $first == "o") {
@@ -117,7 +119,7 @@ class UniversityController
 
         return $responseJson->withJson([
             "status" => 1,
-            "data" => $universities,
+            "data" => array_values($universities->toArray()),
             "message" => "Universities with the sector : {$this->sector[$secod]} and the area: $first"
         ], 200);
 
