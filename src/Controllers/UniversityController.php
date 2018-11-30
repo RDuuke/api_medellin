@@ -101,7 +101,6 @@ class UniversityController
             ->select(["universidades.codigo", "universidades.nombre", "area_de_conocimiento.id AS area", "universidades.sector"])
             ->groupBy(["universidades.codigo"])
             ->get();
-        echo "<pre>";
 
         $first= $args['first'];
         $secod = $args['second'] ?? "";
