@@ -14,8 +14,7 @@ class UserApiMiddleware
     public function __invoke(Request $request, Response $response, callable $next)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
-        print_r($request->getHeaders());
-        die;
+
         if (! empty(array_shift($request->getHeader("PHP_AUTH_PW"))) && !empty(array_shift($request->getHeader("PHP_AUTH_USER")))) {
             $user_api =  UsersApi::where("user", array_shift($request->getHeader("PHP_AUTH_USER")))
                 ->where("password", (md5(array_shift($request->getHeader("PHP_AUTH_PW")))))
