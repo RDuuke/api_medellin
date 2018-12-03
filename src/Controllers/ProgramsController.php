@@ -62,7 +62,7 @@ class ProgramsController extends Controller
         return $responseJson->withJson([
             "status" => 1,
             "data" => $programs,
-            "message" => "All programs"
+            "message" => "Programs for the academic level: " . $this->academic_level[$args['level']]
         ]);
 
     }
