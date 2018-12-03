@@ -17,7 +17,8 @@ $app->group("/api/v1", function () {
     //$this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
     //$this->get("/search[/{area}/{sector}]", "ProgramsController:programForAreaSectorAndUniversity");
 
-    $this->get("/areas", "ProgramsController:areas");
+    $this->get("/areas", "AreasController:all");
+    $this->get("/search/university[/{first}[/{second}]]", "UniversityController:getUniversityForSectorOrArea");
     #TODO filtros
     // endpoint/search
     // endpoint/search/1
