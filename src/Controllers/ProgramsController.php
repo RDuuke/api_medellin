@@ -66,7 +66,7 @@ class ProgramsController extends Controller
         ]);
 
     }
-    public function programForAreaSectorAndUniversity(Request $request, Response $response, $args)
+    public function programForAreaAndUniversity(Request $request, Response $response, $args)
     {
 
     }

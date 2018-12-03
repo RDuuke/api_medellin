@@ -19,11 +19,12 @@ $app->group("/api/v1", function () {
 
     $this->get("/areas", "AreasController:all");
     $this->get("/search/university[/{first}[/{second}]]", "UniversityController:getUniversityForSectorOrArea");
+    #$this->get("/search/{area}", );
     #TODO filtros
-    // endpoint/search
-    // endpoint/search/1
-    // endpoint/search//1
-    // endpoint/search/2/1
+    // AREA
+    // AREA Y UNIVERSIDAD
+    // AREA, UNIVERSIDAD y SECTOR
+
 });
 
 $app->group("/api/v1", function (){
