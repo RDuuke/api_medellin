@@ -2,13 +2,15 @@
 
 namespace Api\Controllers;
 
+use Api\Models\Areas;
 use Api\Models\University;
 use Api\Models\UsersApi;
 use Illuminate\Database\Capsule\Manager;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class UniversityController
+class UniversityController extends Controller
+
 {
     protected $sector = ["p" => "PRIVADA", "o" => "OFICIAL"];
     public function filterAllUniversity(Request $request, Response $response)
@@ -90,36 +92,66 @@ class UniversityController
         }
     }
 
-    public function getUniversityForSectorOrArea(Request $request, Response $response, $args)
+    public function getForArea(Request $request, Response $response, $args)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
 
-        $universities_filter = Manager::table("universidades")
+        $universities = Manager::table("universidades")
             ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
             ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
             ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
-            ->select(["universidades.codigo", "universidades.nombre", "area_de_conocimiento.id AS area", "universidades.sector"])
+            ->select(["universidades.codigo", "universidades.nombre"])
+            ->where("area_de_conocimiento.id", $args["area"])
             ->groupBy(["universidades.codigo"])
             ->get();
 
-        $first= $args['first'];
-        $secod = $args['second'] ?? "";
-        if ($first == "p" or $first == "o") {
-            $universities = $universities_filter->where("sector", "=", $this->sector[$first]);
-            if (!empty($secod)) {
-                $universities = $universities_filter->where("area", "=", $secod);
-            }
-        } else {
-            $universities = $universities_filter->where("area", "=", $first);
-            if (!empty($secod)) {
-                $universities = $universities->where("sector", "=", $this->sector[$secod]);
-            }
-        }
 
         return $responseJson->withJson([
             "status" => 1,
-            "data" => array_values($universities->toArray()),
-            "message" => "Universities with the sector : {$this->sector[$secod]} and the area: $first"
+            "data" => $universities,
+            "message" => "Universities for area: " . Areas::find($args["area"])->nombre
+        ], 200);
+
+    }
+
+    public function getForSector(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+
+        $universities = Manager::table("universidades")
+            ->select(["universidades.codigo", "universidades.nombre"])
+            ->where("universidades.sector", $this->sector[$args["sector"]])
+            ->groupBy(["universidades.codigo"])
+            ->get();
+
+
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $universities,
+            "message" => "Universities for sector: " . $this->sector[$args["sector"]]
+        ], 200);
+
+    }
+
+    public function getForAreaAndSector(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+
+        $universities = Manager::table("universidades")
+            ->join("ies_medellin", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.codigo", "universidades.nombre"])
+            ->where("area_de_conocimiento.id", $args["area"])
+            ->where("universidades.sector", $this->sector[$args["sector"]])
+            ->groupBy(["universidades.codigo"])
+            ->get();
+
+
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $universities,
+            "message" => "Universities for area " . Areas::find($args['area']) . " and sector ".$this->sector[$args['sector']]
         ], 200);
 
     }

@@ -3,6 +3,7 @@
 namespace Api\Controllers;
 
 
+use Api\Models\Areas;
 use Api\Models\Programs;
 use Illuminate\Database\Capsule\Manager;
 use Slim\Http\Request;
@@ -12,6 +13,7 @@ class ProgramsController extends Controller
 {
     protected $academic_level = [ 1 => "POSGRADO", 2 => "PREGRADO", 3 => "Tecnológica"];
 
+    protected $sector = ["p" => "PRIVADA", "o" => "OFICIAL"];
 
     public function areas(Request $request, Response $response)
     {
@@ -25,7 +27,7 @@ class ProgramsController extends Controller
         ], 200);
     }
 
-    public function detailsForProgram(Request $request, Response $response, $args)
+    public function getDetails(Request $request, Response $response, $args)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
         $program = self::getData(1, $args['id']);
@@ -48,7 +50,7 @@ class ProgramsController extends Controller
         ]);
     }
 
-    public function levelAcademic(Request $request, Response $response, $args)
+    public function getForLevelAcademic(Request $request, Response $response, $args)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
         $programs = Manager::table("universidades")
@@ -66,9 +68,125 @@ class ProgramsController extends Controller
         ]);
 
     }
-    public function programForAreaAndUniversity(Request $request, Response $response, $args)
+    public function getForAreaSectorAndUniversity(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+        $programs = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
+            ->where("area_de_conocimiento.id", $args["area"])
+            ->where("universidades.sector", $args["sector"])
+            ->where("universidades.codigo", $args["codigo"])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $programs,
+            "message" => "Programs for area, sector and university"
+        ]);
+
+    }
+
+    public function getForArea(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+        $programs = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
+            ->where("area_de_conocimiento.id", $args["area"])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $programs,
+            "message" => "Programs for area"
+        ]);
+    }
+
+    public function getForAreaAndSector(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+        $programs = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
+            ->where("area_de_conocimiento.id", $args["area"])
+            ->where("universidades.sector", $this->sector[$args["sector"]])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $programs,
+            "message" => "Programs for area and sector"
+        ]);
+    }
+
+    public function getForAreaAndUniversity(Request $request, Response $response, $args)
+    {
+        $responseJson = $response->withHeader("Content-type", "application/json");
+        $programs = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
+            ->where("area_de_conocimiento.id", $args["area"])
+            ->where("universidades.codigo", $args["codigo"])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $programs,
+            "message" => "Programs for area and university"
+        ]);
+    }
+
+    public function getForSector(Request $request, Response $response, $args)
     {
 
+        $responseJson = $response->withHeader("Content-type", "application/json");
+        $programs = Manager::table("ies_medellin")
+            ->join("universidades", "universidades.codigo", "=", "ies_medellin.codigo_institucion")
+            ->join("basico_de_conocimiento", "basico_de_conocimiento.id", "=", "ies_medellin.basico_de_conocimiento")
+            ->join("area_de_conocimiento", "area_de_conocimiento.id", "=", "basico_de_conocimiento.area_conocimiento")
+            ->select(["universidades.sector", "ies_medellin.*",
+                "universidades.logo_universidad", "universidades.direccion",
+                "universidades.direccion_google_maps AS google_maps",
+                "universidades.nombre AS nombre_universidad",
+                "basico_de_conocimiento.nombre AS basico",
+                "area_de_conocimiento.nombre AS area",
+                "universidades.caracter_academico AS caracter"])
+            ->where("universidades.sector", $this->sector[$args["sector"]])
+            ->get();
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $programs,
+            "message" => "Programs for sector"
+        ]);
     }
 
     protected function getData($type, $value = "", $last_type ="")
@@ -95,6 +213,9 @@ class ProgramsController extends Controller
                 } else {
                     $programs = $programs->where("nivel_formacion", $last_type);
                 }
+                break;
+            case 3 :
+
                 break;
             default :
                 break;

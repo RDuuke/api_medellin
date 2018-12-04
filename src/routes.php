@@ -4,27 +4,24 @@ $app->group("/api/v1", function () {
     $this->group("/filter/university", function () {
         $this->get("", "UniversityController:filterAllUniversity");
         $this->get("/{id}", "UniversityController:find");
-
     });
     $this->get("/university", "UniversityController:AllUniversity");
     $this->get("/university/{codigo}/programs", "UniversityController:programsForUniversity");
     $this->group("/programs", function (){
-        $this->get("/{id}", "ProgramsController:detailsForProgram");
+        $this->get("/{id}", "ProgramsController:getDetails");
         $this->get("", "ProgramsController:all");
-        $this->get("/academic-level/{level}", "ProgramsController:levelAcademic");
+        $this->get("/academic-level/{level}", "ProgramsController:getForLevelAcademic");
     });
+
     $this->post("/user", "UserAppController:storeUser")->add(new \Api\Middlewares\UserApiMiddleware());
-    //$this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
-    //$this->get("/search[/{area}/{sector}]", "ProgramsController:programForAreaSectorAndUniversity");
-
     $this->get("/areas", "AreasController:all");
-    $this->get("/search/university[/{first}[/{second}]]", "UniversityController:getUniversityForSectorOrArea");
-    #$this->get("/search/{area}", );
-    #TODO filtros
-    // AREA
-    // AREA Y UNIVERSIDAD
-    // AREA, UNIVERSIDAD y SECTOR
-
+    $this->get("/search/university/area/{area}", "UniversityController:getForArea");
+    $this->get("/search/university/sector/{sector}", "UniversityController:getForSector");
+    $this->get("/search/university/area/{area}/sector/{sector}", "UniversityController:getForAreaAndSector");
+    $this->get("/search/programs/area/{area}", "ProgramsController:getForArea");
+    $this->get("/search/programs/area/{area}/sector/{sector}", "ProgramsController:getForAreaAndSector");
+    $this->get("/search/programs/area/{area}/university/{codigo}", "ProgramsController:getForAreaAndUniversity");
+    $this->get("/search/programs/sector/{sector}", "ProgramsController:getForSector");
 });
 
 $app->group("/api/v1", function (){
