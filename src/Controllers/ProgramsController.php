@@ -201,7 +201,9 @@ class ProgramsController extends Controller
                 "universidades.nombre AS nombre_universidad",
                 "basico_de_conocimiento.nombre AS basico",
                 "area_de_conocimiento.nombre AS area",
-                "universidades.caracter_academico AS caracter"])
+                "universidades.caracter_academico AS caracter",
+                "universidades.latitud",
+                "universidades.longitud"])
             ->get();
         switch ($type) {
             case 1 :

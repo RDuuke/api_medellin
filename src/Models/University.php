@@ -14,7 +14,9 @@ class University extends Model
         "departamento", "municipio",
         "direccion", "direccion_google_maps", "telefono",
         "estado", "web",
-        "logo_universidad"
+        "logo_universidad",
+        "latitud",
+        "longitud"
     ];
 
     public function getSectorAttribute($value)
