@@ -151,7 +151,7 @@ class UniversityController extends Controller
         return $responseJson->withJson([
             "status" => 1,
             "data" => $universities,
-            "message" => "Universities for area " . Areas::find($args['area']) . " and sector ".$this->sector[$args['sector']]
+            "message" => "Universities for area " . Areas::find($args['area'])->nombre . " and sector ".$this->sector[$args['sector']]
         ], 200);
 
     }

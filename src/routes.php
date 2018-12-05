@@ -16,12 +16,12 @@ $app->group("/api/v1", function () {
     $this->post("/user", "UserAppController:storeUser")->add(new \Api\Middlewares\UserApiMiddleware());
     $this->get("/areas", "AreasController:all");
     $this->get("/search/university/area/{area}", "UniversityController:getForArea");
-    $this->get("/search/university/sector/{sector}", "UniversityController:getForSector");
-    $this->get("/search/university/area/{area}/sector/{sector}", "UniversityController:getForAreaAndSector");
-    $this->get("/search/program/area/{area}", "ProgramsController:getForArea");
-    $this->get("/search/program/area/{area}/sector/{sector}", "ProgramsController:getForAreaAndSector");
-    $this->get("/search/program/area/{area}/university/{codigo}", "ProgramsController:getForAreaAndUniversity");
-    $this->get("/search/program/sector/{sector}", "ProgramsController:getForSector");
+    $this->get("/search/universities/sector/{sector}", "UniversityController:getForSector");
+    $this->get("/search/universities/area/{area}/sector/{sector}", "UniversityController:getForAreaAndSector");
+    $this->get("/search/programs/area/{area}", "ProgramsController:getForArea");
+    $this->get("/search/programs/area/{area}/sector/{sector}", "ProgramsController:getForAreaAndSector");
+    $this->get("/search/programs/area/{area}/university/{codigo}", "ProgramsController:getForAreaAndUniversity");
+    $this->get("/search/programs/sector/{sector}", "ProgramsController:getForSector");
 });
 
 $app->group("/api/v1", function (){
