@@ -5,7 +5,7 @@ $app->group("/api/v1", function () {
         $this->get("", "UniversityController:filterAllUniversity");
         $this->get("/{id}", "UniversityController:find");
     });
-    $this->get("/university", "UniversityController:AllUniversity");
+    $this->get("/universities", "UniversityController:AllUniversity");
     $this->get("/university/{codigo}/programs", "UniversityController:programsForUniversity");
     $this->group("/programs", function (){
         $this->get("/{id}", "ProgramsController:getDetails");
