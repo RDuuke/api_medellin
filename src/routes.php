@@ -10,7 +10,7 @@ $app->group("/api/v1", function () {
     });
     $this->post("/user", "UserAppController:storeUser")->add(new \Api\Middlewares\UserApiMiddleware());
     $this->get("/areas", "AreasController:all");
-    $this->get("/search/university/area/{area}", "UniversityController:getForArea");
+    $this->get("/search/universities/area/{area}", "UniversityController:getForArea");
     $this->get("/search/universities/sector/{sector}", "UniversityController:getForSector");
     $this->get("/search/universities/area/{area}/sector/{sector}", "UniversityController:getForAreaAndSector");
     $this->get("/search/programs/area/{area}", "ProgramsController:getForArea");
