@@ -1,10 +1,6 @@
 <?php
 
 $app->group("/api/v1", function () {
-    $this->group("/filter/university", function () {
-        $this->get("", "UniversityController:filterAllUniversity");
-        $this->get("/{id}", "UniversityController:find");
-    });
     $this->get("/universities", "UniversityController:AllUniversity");
     $this->get("/university/{codigo}/programs", "UniversityController:programsForUniversity");
     $this->group("/programs", function (){
@@ -12,7 +8,6 @@ $app->group("/api/v1", function () {
         $this->get("", "ProgramsController:all");
         $this->get("/academic-level/{level}", "ProgramsController:getForLevelAcademic");
     });
-
     $this->post("/user", "UserAppController:storeUser")->add(new \Api\Middlewares\UserApiMiddleware());
     $this->get("/areas", "AreasController:all");
     $this->get("/search/university/area/{area}", "UniversityController:getForArea");
@@ -22,8 +17,5 @@ $app->group("/api/v1", function () {
     $this->get("/search/programs/area/{area}/sector/{sector}", "ProgramsController:getForAreaAndSector");
     $this->get("/search/programs/area/{area}/university/{codigo}", "ProgramsController:getForAreaAndUniversity");
     $this->get("/search/programs/sector/{sector}", "ProgramsController:getForSector");
-});
-
-$app->group("/api/v1", function (){
-   $this->get("/news", "NewsController:all");
+    $this->get("/news", "NewsController:all");
 });
