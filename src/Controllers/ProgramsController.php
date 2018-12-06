@@ -30,8 +30,8 @@ class ProgramsController extends Controller
     public function getDetails(Request $request, Response $response, $args)
     {
         $responseJson = $response->withHeader("Content-type", "application/json");
-        $program = self::getData(1, $args['id']);
-
+        $data = self::getData(1, $args['id']);
+        $program = array_values($data->toArray());
         return $responseJson->withJson([
             "status" => 1,
             "data" => $program,
@@ -203,8 +203,7 @@ class ProgramsController extends Controller
                 "area_de_conocimiento.nombre AS area",
                 "universidades.caracter_academico AS caracter",
                 "universidades.latitud",
-                "universidades.longitud"])
-            ->get();
+                "universidades.longitud"])->get();
         switch ($type) {
             case 1 :
                 $programs = $programs->where("id", $value);
