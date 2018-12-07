@@ -9,4 +9,9 @@ class News extends Model
 
     protected $hidden = ["updated_at"];
 
+
+    function getCreatedAtAttribute($value)
+    {
+        return date("d-m-Y", strtotime($value));
+    }
 }
