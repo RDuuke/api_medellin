@@ -18,4 +18,5 @@ $app->group("/api/v1", function () {
     $this->get("/search/programs/area/{area}/university/{codigo}", "ProgramsController:getForAreaAndUniversity");
     $this->get("/search/programs/sector/{sector}", "ProgramsController:getForSector");
     $this->get("/news", "NewsController:all");
+    $this->get("/news/{id}", "NewsController:find");
 });

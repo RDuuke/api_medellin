@@ -7,6 +7,6 @@ class News extends Model
 {
     protected $table = "novedades";
 
-    protected $hidden = ["created_at", "updated_at"];
+    protected $hidden = ["updated_at"];
 
 }

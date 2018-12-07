@@ -16,9 +16,9 @@ class NewsController extends Controller
         $news = News::all();
 
         return $responseJson->withJson([
-           "status" => 1,
-           "data" => $news,
-           "message" => "All news"
+            "status" => 1,
+            "data" => $news,
+            "message" => "All news"
         ], 200);
     }
 }
