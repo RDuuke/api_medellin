@@ -1,10 +1,12 @@
 <?php
 
 $app->group("/api/v1", function () {
-    $this->group("/university", function () {
-        $this->get("", "UniversityController:all");
+    $this->group("/filter/university", function () {
+        $this->get("", "UniversityController:filterAllUniversity");
         $this->get("/{id}", "UniversityController:find");
+
     });
+    $this->get("/university", "UniversityController:AllUniversity");
 
     $this->group("/programs", function (){
         $this->get("/{codigo}", "ProgramsController:programsForUniversity");
@@ -12,7 +14,7 @@ $app->group("/api/v1", function () {
     $this->get("/search/{area}[/{sector}[/{university}]]", "ProgramsController:programForAreaSectorAndUniversity");
 
     $this->get("/areas", "ProgramsController:areas");
-})->add(new \Api\Middlewares\UserApiMiddleware());
+});
 
 $app->group("/api/v1", function (){
    $this->get("/news", "NewsController:all");

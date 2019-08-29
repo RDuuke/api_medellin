@@ -9,12 +9,26 @@ use Slim\Http\Response;
 
 class UniversityController
 {
-    public function all(Request $request, Response $response)
+    public function filterAllUniversity(Request $request, Response $response)
     {
 
         $responseJson = $response->withHeader("Content-type", "application/json");
 
         $universities = University::all(["codigo", "nombre"]);
+        return $responseJson->withJson([
+            "status" => 1,
+            "data" => $universities,
+            "message" => "All universities"
+            ],
+            200
+        );
+    }
+    public function AllUniversity(Request $request, Response $response)
+    {
+
+        $responseJson = $response->withHeader("Content-type", "application/json");
+
+        $universities = University::all(["codigo", "nombre", "sector", "logo_universidad"]);
         return $responseJson->withJson([
             "status" => 1,
             "data" => $universities,
